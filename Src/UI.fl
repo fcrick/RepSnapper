@@ -14,7 +14,7 @@ class GUI {open
   } {
     Fl_Window mainWindow {
       label {RepSnapper by Kulitorum www.kulitorum.com} open
-      xywh {362 175 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 hide resizable
+      xywh {-54 367 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 resizable visible
     } {
       Fl_Box MVC {
         label {An instace of ModelViewController}
@@ -29,7 +29,7 @@ class GUI {open
         xywh {835 25 560 825} align 5
       } {
         Fl_Group {} {
-          label {Input file}
+          label {Input file} open
           xywh {835 45 550 785} hide
         } {
           Fl_Button {} {
@@ -74,7 +74,7 @@ MVC->redraw();
             xywh {975 55 135 25} deactivate
           }
           Fl_Group {} {
-            label {Object rotation} open
+            label {Object rotation}
             xywh {840 780 535 50} box FLAT_BOX color 39
           } {
             Fl_Button AutoRotateButton {
@@ -124,7 +124,7 @@ MVC->ProcessControl.SaveXML();}
             xywh {1250 55 135 25}
           }
           Fl_Group {} {
-            label {Lua script} open
+            label {Lua script}
             xywh {845 575 535 190} box ENGRAVED_FRAME color 39
           } {
             Fl_Text_Editor LuaScriptEditor {
@@ -165,7 +165,7 @@ MVC->redraw();
             class Flu_Tree_Browser
           }
           Fl_Group {} {
-            label Translate open
+            label Translate
             xywh {1205 185 180 40} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input TranslateX {
@@ -185,7 +185,7 @@ MVC->redraw();
             }
           }
           Fl_Group {} {
-            label Rotate open
+            label Rotate
             xywh {1205 250 180 40} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input RotateX {
@@ -205,7 +205,7 @@ MVC->redraw();
             }
           }
           Fl_Group {} {
-            label Scale open
+            label Scale
             xywh {1205 310 180 70} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input ScaleX {
@@ -429,8 +429,8 @@ shrinkFastButton->value(0);
           }
         }
         Fl_Group {} {
-          label Infill
-          xywh {835 45 540 755} hide
+          label Infill open
+          xywh {835 45 540 755}
         } {
           Fl_Group {} {
             label Infill open
@@ -460,6 +460,21 @@ shrinkFastButton->value(0);
               label {Shell count}
               callback {MVC->SetShellCount(o->value());}
               xywh {1110 90 255 20} type {Horz Knob} selection_color 2 align 5 minimum 1 maximum 10 step 1 value 1 textsize 14
+            }
+          }
+          Fl_Group {} {
+            label {Alternate Infill Layers} open
+            xywh {840 260 535 80} box ENGRAVED_FRAME color 39
+          } {
+            Fl_Input AltInfillLayersInput {
+              label {Layers (comma sep, 0 is bottom, -1 is top)}
+              callback {MVC->SetAltInfillLayersText(o->value());}
+              xywh {1120 270 245 25}
+            }
+            Fl_Value_Slider AltInfillDistanceSlider {
+              label {Infill Distance}
+              callback {MVC->SetAltInfillDistance(o->value());} selected
+              xywh {850 310 515 20} type {Horz Knob} selection_color 2 align 5 minimum 0.1 maximum 10 step 0.1 value 2 textsize 14
             }
           }
         }
@@ -942,8 +957,8 @@ MVC->redraw();}
           }
         }
         Fl_Group {} {
-          label Print open
-          xywh {835 50 560 800} color 47
+          label Print
+          xywh {835 50 560 800} color 47 hide
         } {
           Fl_Tabs {} {open
             xywh {835 220 540 595}
@@ -1250,7 +1265,7 @@ o->deactivate();}
             }
             Fl_Button KickButton {
               label Kick
-              callback {MVC->Continue();} selected
+              callback {MVC->Continue();}
               xywh {1270 80 95 25}
             }
           }

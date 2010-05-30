@@ -264,6 +264,16 @@ private:
   void cb_ShellCountSlider_i(Fl_Value_Slider*, void*);
   static void cb_ShellCountSlider(Fl_Value_Slider*, void*);
 public:
+  Fl_Input *AltInfillLayersInput;
+private:
+  void cb_AltInfillLayersInput_i(Fl_Input*, void*);
+  static void cb_AltInfillLayersInput(Fl_Input*, void*);
+public:
+  Fl_Value_Slider *AltInfillDistanceSlider;
+private:
+  void cb_AltInfillDistanceSlider_i(Fl_Value_Slider*, void*);
+  static void cb_AltInfillDistanceSlider(Fl_Value_Slider*, void*);
+public:
   Fl_Value_Slider *RaftMaterialPrDistanceRatioSlider;
 private:
   void cb_RaftMaterialPrDistanceRatioSlider_i(Fl_Value_Slider*, void*);

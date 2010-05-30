@@ -429,6 +429,20 @@ void GUI::cb_ShellCountSlider(Fl_Value_Slider* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->parent()->user_data()))->cb_ShellCountSlider_i(o,v);
 }
 
+void GUI::cb_AltInfillLayersInput_i(Fl_Input* o, void*) {
+  MVC->SetAltInfillLayersText(o->value());
+}
+void GUI::cb_AltInfillLayersInput(Fl_Input* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->parent()->user_data()))->cb_AltInfillLayersInput_i(o,v);
+}
+
+void GUI::cb_AltInfillDistanceSlider_i(Fl_Value_Slider* o, void*) {
+  MVC->SetAltInfillDistance(o->value());
+}
+void GUI::cb_AltInfillDistanceSlider(Fl_Value_Slider* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->parent()->user_data()))->cb_AltInfillDistanceSlider_i(o,v);
+}
+
 void GUI::cb_RaftMaterialPrDistanceRatioSlider_i(Fl_Value_Slider* o, void*) {
   MVC->SetRaftMaterialPrDistanceRatio(o->value());
 }
@@ -1739,7 +1753,6 @@ GUI::GUI() {
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(835, 45, 540, 755, "Infill");
-        o->hide();
         { Fl_Group* o = new Fl_Group(840, 70, 535, 170, "Infill");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
@@ -1789,6 +1802,25 @@ GUI::GUI() {
             ShellCountSlider->callback((Fl_Callback*)cb_ShellCountSlider);
             ShellCountSlider->align(FL_ALIGN_TOP_LEFT);
           } // Fl_Value_Slider* ShellCountSlider
+          o->end();
+        } // Fl_Group* o
+        { Fl_Group* o = new Fl_Group(840, 260, 535, 80, "Alternate Infill Layers");
+          o->box(FL_ENGRAVED_FRAME);
+          o->color((Fl_Color)FL_DARK3);
+          { AltInfillLayersInput = new Fl_Input(1120, 270, 245, 25, "Layers (comma sep, 0 is bottom, -1 is top)");
+            AltInfillLayersInput->callback((Fl_Callback*)cb_AltInfillLayersInput);
+          } // Fl_Input* AltInfillLayersInput
+          { AltInfillDistanceSlider = new Fl_Value_Slider(850, 310, 515, 20, "Infill Distance");
+            AltInfillDistanceSlider->type(5);
+            AltInfillDistanceSlider->selection_color((Fl_Color)2);
+            AltInfillDistanceSlider->minimum(0.1);
+            AltInfillDistanceSlider->maximum(10);
+            AltInfillDistanceSlider->step(0.1);
+            AltInfillDistanceSlider->value(2);
+            AltInfillDistanceSlider->textsize(14);
+            AltInfillDistanceSlider->callback((Fl_Callback*)cb_AltInfillDistanceSlider);
+            AltInfillDistanceSlider->align(FL_ALIGN_TOP_LEFT);
+          } // Fl_Value_Slider* AltInfillDistanceSlider
           o->end();
         } // Fl_Group* o
         o->end();
@@ -2328,6 +2360,7 @@ e rest of the print.");
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(835, 50, 560, 800, "Print");
         o->color((Fl_Color)FL_DARK1);
+        o->hide();
         { Fl_Tabs* o = new Fl_Tabs(835, 220, 540, 595);
           { CommunationLog = new Fl_Multi_Browser(840, 245, 530, 565, "Communication log");
             CommunationLog->box(FL_NO_BOX);

@@ -83,6 +83,8 @@ public:
 		InfillDistance = 2.0f;
 		InfillRotation = 45.0f;
 		InfillRotationPrLayer = 90.0f;
+		AltInfillDistance = 2.0f;
+		AltInfillLayersText = "";
 		Examine = 0.5f;
 
 		DisplayDebuginFill = false;
@@ -144,7 +146,7 @@ public:
 	// LUA
 	void BindLua(lua_State *myLuaState);
 
-
+	void GetAltInfillLayers(vector<int>& layers, uint layerCount) const;
 
 	// Process functions
 	string m_Filename;
@@ -206,6 +208,8 @@ public:
 	float InfillDistance;
 	float InfillRotation;
 	float InfillRotationPrLayer;
+	float AltInfillDistance;
+	string AltInfillLayersText;
 	float Examine;
 
 	bool ShellOnly;

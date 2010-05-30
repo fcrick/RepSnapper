@@ -11,6 +11,7 @@
 * ------------------------------------------------------------------------- */
 #include "stdafx.h"
 #include "ProcessController.h"
+#include <boost/algorithm/string.hpp>
 
 /*ProcessController::~ProcessController()
 {
@@ -27,6 +28,11 @@ void ProcessController::ConvertToGCode(string &GcodeTxt, const string &GcodeStar
 
 	// Make Layers
 	uint LayerNr = 0;
+	uint LayerCount = (uint)ceil((Max.z+LayerThickness*0.5f)/LayerThickness);
+
+	vector<int> altInfillLayers;
+	GetAltInfillLayers(altInfillLayers, LayerCount);
+
 	printOffset = PrintMargin;
 
 	float z=Min.z+LayerThickness*0.5f;				// Offset it a bit in Z, z=0 gives a empty slice because no triangles crosses this Z value
@@ -82,7 +88,15 @@ void ProcessController::ConvertToGCode(string &GcodeTxt, const string &GcodeStar
 						infillCuttingPlane.ShrinkFast(ExtrudedMaterialWidth*0.5f, z, DisplayCuttingPlane, false, ShellCount);
 					else
 						infillCuttingPlane.ShrinkNice(ExtrudedMaterialWidth*0.5f, z, DisplayCuttingPlane, false, ShellCount);
-					infillCuttingPlane.CalcInFill(infill, LayerNr, destinationZ, InfillDistance, InfillRotation, InfillRotationPrLayer, DisplayDebuginFill);
+
+					// check if this if a layer we should use the alternate infill distance on
+					float infillDistance = InfillDistance;
+					if (std::find(altInfillLayers.begin(), altInfillLayers.end(), LayerNr) != altInfillLayers.end())
+					{
+						infillDistance = AltInfillDistance;
+					}
+
+					infillCuttingPlane.CalcInFill(infill, LayerNr, destinationZ, infillDistance, InfillRotation, InfillRotationPrLayer, DisplayDebuginFill);
 					}
 				// Make the GCode from the plane and the infill
 				plane.MakeGcode(infill, gcode, E, destinationZ, MinPrintSpeedXY, MaxPrintSpeedXY, MinPrintSpeedZ, MaxPrintSpeedZ, DistanceToReachFullSpeed, extrusionFactor, UseIncrementalEcode, Use3DGcode, EnableAcceleration);
@@ -434,8 +448,9 @@ void ProcessController::SaveXML(XMLElement *e)
 	x->FindVariableZ("InfillDistance", true, "2")->SetValueFloat(InfillDistance);
 	x->FindVariableZ("InfillRotation", true, "90")->SetValueFloat(InfillRotation);
 	x->FindVariableZ("InfillRotationPrLayer", true, "90")->SetValueFloat(InfillRotationPrLayer);
+	x->FindVariableZ("AltInfillDistance", true, "2")->SetValueFloat(AltInfillDistance);
+	x->FindVariableZ("AltInfillLayers", true,"[Empty]")->SetValue(AltInfillLayersText.c_str());	
 	x->FindVariableZ("PolygonOpasity", true, "0.66")->SetValueFloat(PolygonOpasity);
-
 
 	// GUI parameters
 	x->FindVariableZ("CuttingPlaneValue", true, "0.66")->SetValueFloat(CuttingPlaneValue);
@@ -631,6 +646,13 @@ void ProcessController::LoadXML(XMLElement *e)
 	if(y)	InfillRotation = y->GetValueFloat();
 	y=x->FindVariableZ("InfillRotationPrLayer", true, "90");
 	if(y)	InfillRotationPrLayer = y->GetValueFloat();
+	y=x->FindVariableZ("AltInfillDistance", true, "2");
+	if(y) AltInfillDistance = y->GetValueFloat();
+
+	memset(buffer,0,10000);
+	x->FindVariableZ("AltInfillLayers", true, "")->GetValue(buffer);
+	AltInfillLayersText = string(buffer);
+
 	y=x->FindVariableZ("ShellOnly", true, "0");
 	if(y)	ShellOnly = y->GetValueFloat();
 	y=x->FindVariableZ("ShellCount", true, "1");
@@ -1007,5 +1029,26 @@ void ProcessController::BindLua(lua_State *myLuaState)
 			.def ("ApronInfillDistance", ApronInfillDistance)*/
 		];
 #endif
+}
+
+void ProcessController::GetAltInfillLayers(vector<int>& layers, uint layerCount) const
+{
+	vector<string> numstrs;
+	boost::algorithm::split(numstrs, AltInfillLayersText, boost::is_any_of(","));
+
+	vector<string>::iterator numstr_i;
+	for (numstr_i = numstrs.begin(); numstr_i != numstrs.end(); numstr_i++)
+	{
+		int num = atoi((*numstr_i).c_str());
+		if (errno == ERANGE || errno == EINVAL)
+			continue;
+
+		if (num < 0)
+		{
+			num += layerCount;
+		}
+
+		layers.push_back(num);
+	}
 }
 
