@@ -1039,16 +1039,17 @@ void ProcessController::GetAltInfillLayers(vector<int>& layers, uint layerCount)
 	vector<string>::iterator numstr_i;
 	for (numstr_i = numstrs.begin(); numstr_i != numstrs.end(); numstr_i++)
 	{
-		int num = atoi((*numstr_i).c_str());
-		if (errno == ERANGE || errno == EINVAL)
-			continue;
-
-		if (num < 0)
+		int num;
+		int retval = sscanf((*numstr_i).c_str(), "%d", &num);
+		if (retval == 1)
 		{
-			num += layerCount;
-		}
+			if (num < 0)
+			{
+				num += layerCount;
+			}
 
-		layers.push_back(num);
+			layers.push_back(num);
+		}
 	}
 }
 
