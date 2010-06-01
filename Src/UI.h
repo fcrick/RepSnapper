@@ -150,6 +150,10 @@ private:
   static void cb_Delete(Fl_Button*, void*);
   void cb_Duplicate_i(Fl_Button*, void*);
   static void cb_Duplicate(Fl_Button*, void*);
+  void cb_Save3_i(Fl_Button*, void*);
+  static void cb_Save3(Fl_Button*, void*);
+  void cb_Load2_i(Fl_Button*, void*);
+  static void cb_Load2(Fl_Button*, void*);
 public:
   Fl_Value_Input *VolumeX;
   Fl_Value_Input *VolumeY;
@@ -345,8 +349,8 @@ private:
   static void cb_RaftEnableButton(Fl_Light_Button*, void*);
   void cb_Preview_i(Fl_Light_Button*, void*);
   static void cb_Preview(Fl_Light_Button*, void*);
-  void cb_Load2_i(Fl_Button*, void*);
-  static void cb_Load2(Fl_Button*, void*);
+  void cb_Load3_i(Fl_Button*, void*);
+  static void cb_Load3(Fl_Button*, void*);
 public:
   Fl_Output *GCodeLengthText;
 private:
@@ -358,8 +362,8 @@ public:
   Fl_Text_Editor *GCodeEnd;
   Fl_Text_Editor *GCodeResult;
 private:
-  void cb_Save3_i(Fl_Button*, void*);
-  static void cb_Save3(Fl_Button*, void*);
+  void cb_Save4_i(Fl_Button*, void*);
+  static void cb_Save4(Fl_Button*, void*);
 public:
   Fl_Light_Button *DisplayPolygonsButton;
 private:

@@ -138,6 +138,7 @@ public:
 
 	// Load and save settings
 	void LoadXML();
+	void LoadXML(string filename);
 	void SaveXML();
 	void SaveXML(string filename);
 	void LoadXML(XMLElement *e);
@@ -147,6 +148,9 @@ public:
 	void BindLua(lua_State *myLuaState);
 
 	void GetAltInfillLayers(vector<int>& layers, uint layerCount) const;
+	void SaveBuffers();
+	void SaveSettings();
+	void SaveSettingsAs(string path);
 
 	// Process functions
 	string m_Filename;

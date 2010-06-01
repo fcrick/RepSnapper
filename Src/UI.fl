@@ -14,7 +14,7 @@ class GUI {open
   } {
     Fl_Window mainWindow {
       label {RepSnapper by Kulitorum www.kulitorum.com} open
-      xywh {-54 367 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 resizable visible
+      xywh {8 0 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 resizable visible
     } {
       Fl_Box MVC {
         label {An instace of ModelViewController}
@@ -30,7 +30,7 @@ class GUI {open
       } {
         Fl_Group {} {
           label {Input file} open
-          xywh {835 45 550 785} hide
+          xywh {835 45 550 785}
         } {
           Fl_Button {} {
             label {Load STL}
@@ -108,24 +108,12 @@ MVC->redraw();}
           }
           Fl_Button {} {
             label {Save settings}
-            callback {Fl_Text_Buffer* buffer = GCodeStart->buffer();
-char* pText = buffer->text();
-MVC->ProcessControl.GCodeStartText = string(pText);
-free(pText);
-buffer = GCodeLayer->buffer();
-pText = buffer->text();
-MVC->ProcessControl.GCodeLayerText = string(pText);
-free(pText);
-buffer = GCodeEnd->buffer();
-pText = buffer->text();
-MVC->ProcessControl.GCodeEndText = string(pText);
-free(pText);
-MVC->ProcessControl.SaveXML();}
+            callback {MVC->ProcessControl.SaveSettings();}
             xywh {1250 55 135 25}
           }
           Fl_Group {} {
             label {Lua script}
-            xywh {845 575 535 190} box ENGRAVED_FRAME color 39
+            xywh {845 605 535 160} box ENGRAVED_FRAME color 39
           } {
             Fl_Text_Editor LuaScriptEditor {
               label {LUA script:}
@@ -136,7 +124,7 @@ MVC->ProcessControl.SaveXML();}
             Fl_Button RunLuaButton {
               label Run
               callback {MVC->RunLua(LuaScriptEditor->buffer()->text());}
-              xywh {1250 580 125 25}
+              xywh {1250 605 125 5}
             }
           }
           Fl_Button {} {
@@ -160,18 +148,18 @@ MVC->redraw();
           Fl_Box RFP_Browser {
             label {RFO file}
             callback {MVC->redraw();}
-            xywh {845 115 355 440} box UP_BOX align 16 when 1 resizable
+            xywh {845 145 355 440} box UP_BOX align 16 when 1 resizable
             code0 {\#include "Flu_Tree_Browser.h"}
             class Flu_Tree_Browser
           }
           Fl_Group {} {
             label Translate
-            xywh {1205 185 180 40} box ENGRAVED_FRAME color 39
+            xywh {1205 185 180 64} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input TranslateX {
               label X
               callback {MVC->Translate("X", o->value());}
-              xywh {1220 196 45 23} minimum -300 maximum 300 step 0.1
+              xywh {1220 226 45 23} minimum -300 maximum 300 step 0.1
             }
             Fl_Value_Input TranslateY {
               label Y
@@ -186,12 +174,12 @@ MVC->redraw();
           }
           Fl_Group {} {
             label Rotate
-            xywh {1205 250 180 40} box ENGRAVED_FRAME color 39
+            xywh {1205 250 180 64} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input RotateX {
               label X
               callback {MVC->RotateObject(1,0,0, o->value());}
-              xywh {1220 261 45 23} minimum -360 maximum 360 step 1
+              xywh {1220 291 45 23} minimum -360 maximum 360 step 1
             }
             Fl_Value_Input RotateY {
               label Y
@@ -206,12 +194,12 @@ MVC->redraw();
           }
           Fl_Group {} {
             label Scale
-            xywh {1205 310 180 70} box ENGRAVED_FRAME color 39
+            xywh {1205 310 180 90} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input ScaleX {
               label X
               callback {MVC->Scale("X", o->value());}
-              xywh {1220 321 45 23} minimum -100 maximum 100 step 0.01 value 1
+              xywh {1220 351 45 23} minimum -100 maximum 100 step 0.01 value 1
             }
             Fl_Value_Input ScaleY {
               label Y
@@ -225,28 +213,28 @@ MVC->redraw();
             }
             Fl_Light_Button ScaleAllAxies {
               label {All axis}
-              xywh {1220 350 160 20} value 1 selection_color 2
+              xywh {1220 380 160 20} value 1 selection_color 2
             }
           }
           Fl_Input FileLocationInput {
             label {File location}
             callback {MVC->setFileLocation(o->value());}
-            xywh {1205 441 180 24} align 5
+            xywh {1205 471 180 24} align 5
           }
           Fl_Input FileTypeInput {
             label Filetype
             callback {MVC->setFileType(o->value());}
-            xywh {1205 486 180 24} align 5
+            xywh {1205 516 180 24} align 5
           }
           Fl_Input FileMaterialInput {
             label {File material}
             callback {MVC->setFileMaterial(o->value());}
-            xywh {1205 531 180 24} align 5
+            xywh {1205 561 180 24} align 5
           }
           Fl_Input ObjectNameInput {
             label {Object name}
             callback {MVC->setObjectname(o->value());}
-            xywh {1205 396 180 24} align 5
+            xywh {1205 426 180 24} align 5
           }
           Fl_Button {} {
             label {New RFO Object}
@@ -256,7 +244,7 @@ MVC->redraw();
           Fl_Button {} {
             label {Save RFO}
             callback {MVC->ProcessControl.rfo.Save(string("test.xml"), MVC->ProcessControl);}
-            xywh {1250 85 135 25}
+            xywh {1115 115 135 25}
           }
           Fl_Button {} {
             label Delete
@@ -266,6 +254,41 @@ MVC->redraw();
           Fl_Button {} {
             label Duplicate
             callback {MVC->Duplicate();}
+            xywh {975 115 135 25}
+          }
+          Fl_Button {} {
+            label {Save settings as...}
+            callback {Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
+chooser.show();
+while (chooser.shown())
+	Fl::wait();
+if(chooser.value() == 0)
+	return;
+std::string dir(chooser.value());
+
+
+if(dir.length())
+{
+MVC->ProcessControl.SaveSettingsAs(dir);
+};}
+            xywh {1250 85 135 25}
+          }
+          Fl_Button {} {
+            label {Load settings...}
+            callback {Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
+chooser.show();
+while (chooser.shown())
+	Fl::wait();
+if(chooser.value() == 0)
+	return;
+std::string dir(chooser.value());
+
+
+if(dir.length())
+{
+MVC->ProcessControl.LoadXML(dir);
+MVC->CopySettingsToGUI();
+};} selected
             xywh {1250 115 135 25}
           }
         }
@@ -429,8 +452,8 @@ shrinkFastButton->value(0);
           }
         }
         Fl_Group {} {
-          label Infill open
-          xywh {835 45 540 755}
+          label Infill
+          xywh {835 45 540 755} hide
         } {
           Fl_Group {} {
             label Infill open
@@ -473,7 +496,7 @@ shrinkFastButton->value(0);
             }
             Fl_Value_Slider AltInfillDistanceSlider {
               label {Infill Distance}
-              callback {MVC->SetAltInfillDistance(o->value());} selected
+              callback {MVC->SetAltInfillDistance(o->value());}
               xywh {850 310 515 20} type {Horz Knob} selection_color 2 align 5 minimum 0.1 maximum 10 step 0.1 value 2 textsize 14
             }
           }

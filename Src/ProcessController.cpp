@@ -375,8 +375,6 @@ void WriteGCode(string &GcodeTxt, const string &GcodeStart, const string &GcodeL
 
 void ProcessController::SaveXML(string filename)
 {
-	filename = filename+".xml";
-
 	XML* xml = new XML(filename.c_str()); 
 	XMLElement* e = xml->GetRootElement();
 	SaveXML(e);
@@ -886,6 +884,12 @@ void ProcessController::LoadXML()
 	XMLElement* e = xml->GetRootElement();
 	LoadXML(e);
 }
+void ProcessController::LoadXML(string filename)
+{
+	XML* xml = new XML(filename.c_str()); 
+	XMLElement* e = xml->GetRootElement();
+	LoadXML(e);
+}
 void ProcessController::SaveXML()
 {
 	string filename = m_Filename+".xml";
@@ -1053,3 +1057,34 @@ void ProcessController::GetAltInfillLayers(vector<int>& layers, uint layerCount)
 	}
 }
 
+void ProcessController::SaveBuffers()
+{
+	Fl_Text_Buffer* buffer = gui->GCodeStart->buffer();
+	char* pText = buffer->text();
+	GCodeStartText = string(pText);
+	free(pText);
+
+	buffer = gui->GCodeLayer->buffer();
+	pText = buffer->text();
+	GCodeLayerText = string(pText);
+	free(pText);
+	
+	buffer = gui->GCodeEnd->buffer();
+	pText = buffer->text();
+	GCodeEndText = string(pText);
+	free(pText);
+
+	AltInfillLayersText = string(gui->AltInfillLayersInput->value());
+}
+
+void ProcessController::SaveSettings()
+{
+	SaveBuffers();
+	SaveXML();
+}
+
+void ProcessController::SaveSettingsAs(string path)
+{
+	SaveBuffers();
+	SaveXML(path);
+}

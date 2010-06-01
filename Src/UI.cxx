@@ -86,19 +86,7 @@ void GUI::cb_RotateZButton(Fl_Button* o, void* v) {
 }
 
 void GUI::cb_Save1_i(Fl_Button*, void*) {
-  Fl_Text_Buffer* buffer = GCodeStart->buffer();
-char* pText = buffer->text();
-MVC->ProcessControl.GCodeStartText = string(pText);
-free(pText);
-buffer = GCodeLayer->buffer();
-pText = buffer->text();
-MVC->ProcessControl.GCodeLayerText = string(pText);
-free(pText);
-buffer = GCodeEnd->buffer();
-pText = buffer->text();
-MVC->ProcessControl.GCodeEndText = string(pText);
-free(pText);
-MVC->ProcessControl.SaveXML();
+  MVC->ProcessControl.SaveSettings();
 }
 void GUI::cb_Save1(Fl_Button* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Save1_i(o,v);
@@ -255,6 +243,45 @@ void GUI::cb_Duplicate_i(Fl_Button*, void*) {
 }
 void GUI::cb_Duplicate(Fl_Button* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Duplicate_i(o,v);
+}
+
+void GUI::cb_Save3_i(Fl_Button*, void*) {
+  Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
+chooser.show();
+while (chooser.shown())
+	Fl::wait();
+if(chooser.value() == 0)
+	return;
+std::string dir(chooser.value());
+
+
+if(dir.length())
+{
+MVC->ProcessControl.SaveSettingsAs(dir);
+};
+}
+void GUI::cb_Save3(Fl_Button* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Save3_i(o,v);
+}
+
+void GUI::cb_Load2_i(Fl_Button*, void*) {
+  Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
+chooser.show();
+while (chooser.shown())
+	Fl::wait();
+if(chooser.value() == 0)
+	return;
+std::string dir(chooser.value());
+
+
+if(dir.length())
+{
+MVC->ProcessControl.LoadXML(dir);
+MVC->CopySettingsToGUI();
+};
+}
+void GUI::cb_Load2(Fl_Button* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Load2_i(o,v);
 }
 
 void GUI::cb_MarginX_i(Fl_Value_Input* o, void*) {
@@ -549,7 +576,7 @@ void GUI::cb_Preview(Fl_Light_Button* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->parent()->user_data()))->cb_Preview_i(o,v);
 }
 
-void GUI::cb_Load2_i(Fl_Button*, void*) {
+void GUI::cb_Load3_i(Fl_Button*, void*) {
   Fl_File_Chooser chooser("\\", "*.gcode", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
@@ -565,8 +592,8 @@ MVC->ReadGCode(dir);
 MVC->redraw();
 };
 }
-void GUI::cb_Load2(Fl_Button* o, void* v) {
-  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Load2_i(o,v);
+void GUI::cb_Load3(Fl_Button* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Load3_i(o,v);
 }
 
 void GUI::cb_Convert_i(Fl_Button*, void*) {
@@ -576,7 +603,7 @@ void GUI::cb_Convert(Fl_Button* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Convert_i(o,v);
 }
 
-void GUI::cb_Save3_i(Fl_Button*, void*) {
+void GUI::cb_Save4_i(Fl_Button*, void*) {
   Fl_File_Chooser chooser("\\", "*.gcode", Fl_File_Chooser::CREATE, "Choose filename");
 chooser.show();
 while (chooser.shown())
@@ -607,8 +634,8 @@ break;
 MVC->redraw();
 };
 }
-void GUI::cb_Save3(Fl_Button* o, void* v) {
-  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Save3_i(o,v);
+void GUI::cb_Save4(Fl_Button* o, void* v) {
+  ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Save4_i(o,v);
 }
 
 void GUI::cb_DisplayPolygonsButton_i(Fl_Light_Button* o, void*) {
@@ -1405,7 +1432,6 @@ GUI::GUI() {
     { Tabs = new Fl_Tabs(835, 25, 560, 825);
       Tabs->align(FL_ALIGN_TOP_LEFT);
       { Fl_Group* o = new Fl_Group(835, 45, 550, 785, "Input file");
-        o->hide();
         { Fl_Button* o = new Fl_Button(845, 55, 130, 25, "Load STL");
           o->callback((Fl_Callback*)cb_Load);
         } // Fl_Button* o
@@ -1438,7 +1464,7 @@ GUI::GUI() {
         { Fl_Button* o = new Fl_Button(1250, 55, 135, 25, "Save settings");
           o->callback((Fl_Callback*)cb_Save1);
         } // Fl_Button* o
-        { Fl_Group* o = new Fl_Group(845, 575, 535, 190, "Lua script");
+        { Fl_Group* o = new Fl_Group(845, 605, 535, 160, "Lua script");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
           { Fl_Text_Editor* o = LuaScriptEditor = new Fl_Text_Editor(850, 610, 525, 150, "LUA script:");
@@ -1446,7 +1472,7 @@ GUI::GUI() {
             Fl_Text_Buffer *luascript = new Fl_Text_Buffer();
             o->buffer(luascript);
           } // Fl_Text_Editor* LuaScriptEditor
-          { RunLuaButton = new Fl_Button(1250, 580, 125, 25, "Run");
+          { RunLuaButton = new Fl_Button(1250, 605, 125, 5, "Run");
             RunLuaButton->callback((Fl_Callback*)cb_RunLuaButton);
           } // Fl_Button* RunLuaButton
           o->end();
@@ -1454,7 +1480,7 @@ GUI::GUI() {
         { Fl_Button* o = new Fl_Button(845, 85, 130, 25, "Load RFO");
           o->callback((Fl_Callback*)cb_Load1);
         } // Fl_Button* o
-        { RFP_Browser = new Flu_Tree_Browser(845, 115, 355, 440, "RFO file");
+        { RFP_Browser = new Flu_Tree_Browser(845, 145, 355, 440, "RFO file");
           RFP_Browser->box(FL_UP_BOX);
           RFP_Browser->color((Fl_Color)FL_BACKGROUND_COLOR);
           RFP_Browser->selection_color((Fl_Color)FL_BACKGROUND_COLOR);
@@ -1467,10 +1493,10 @@ GUI::GUI() {
           RFP_Browser->when(FL_WHEN_CHANGED);
           Fl_Group::current()->resizable(RFP_Browser);
         } // Flu_Tree_Browser* RFP_Browser
-        { Fl_Group* o = new Fl_Group(1205, 185, 180, 40, "Translate");
+        { Fl_Group* o = new Fl_Group(1205, 185, 180, 64, "Translate");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { TranslateX = new Fl_Value_Input(1220, 196, 45, 23, "X");
+          { TranslateX = new Fl_Value_Input(1220, 226, 45, 23, "X");
             TranslateX->minimum(-300);
             TranslateX->maximum(300);
             TranslateX->step(0.1);
@@ -1490,10 +1516,10 @@ GUI::GUI() {
           } // Fl_Value_Input* TranslateZ
           o->end();
         } // Fl_Group* o
-        { Fl_Group* o = new Fl_Group(1205, 250, 180, 40, "Rotate");
+        { Fl_Group* o = new Fl_Group(1205, 250, 180, 64, "Rotate");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { RotateX = new Fl_Value_Input(1220, 261, 45, 23, "X");
+          { RotateX = new Fl_Value_Input(1220, 291, 45, 23, "X");
             RotateX->minimum(-360);
             RotateX->maximum(360);
             RotateX->step(1);
@@ -1513,10 +1539,10 @@ GUI::GUI() {
           } // Fl_Value_Input* RotateZ
           o->end();
         } // Fl_Group* o
-        { Fl_Group* o = new Fl_Group(1205, 310, 180, 70, "Scale");
+        { Fl_Group* o = new Fl_Group(1205, 310, 180, 90, "Scale");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { ScaleX = new Fl_Value_Input(1220, 321, 45, 23, "X");
+          { ScaleX = new Fl_Value_Input(1220, 351, 45, 23, "X");
             ScaleX->minimum(-100);
             ScaleX->maximum(100);
             ScaleX->step(0.01);
@@ -1537,39 +1563,45 @@ GUI::GUI() {
             ScaleZ->value(1);
             ScaleZ->callback((Fl_Callback*)cb_ScaleZ);
           } // Fl_Value_Input* ScaleZ
-          { ScaleAllAxies = new Fl_Light_Button(1220, 350, 160, 20, "All axis");
+          { ScaleAllAxies = new Fl_Light_Button(1220, 380, 160, 20, "All axis");
             ScaleAllAxies->value(1);
             ScaleAllAxies->selection_color((Fl_Color)2);
           } // Fl_Light_Button* ScaleAllAxies
           o->end();
         } // Fl_Group* o
-        { FileLocationInput = new Fl_Input(1205, 441, 180, 24, "File location");
+        { FileLocationInput = new Fl_Input(1205, 471, 180, 24, "File location");
           FileLocationInput->callback((Fl_Callback*)cb_FileLocationInput);
           FileLocationInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileLocationInput
-        { FileTypeInput = new Fl_Input(1205, 486, 180, 24, "Filetype");
+        { FileTypeInput = new Fl_Input(1205, 516, 180, 24, "Filetype");
           FileTypeInput->callback((Fl_Callback*)cb_FileTypeInput);
           FileTypeInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileTypeInput
-        { FileMaterialInput = new Fl_Input(1205, 531, 180, 24, "File material");
+        { FileMaterialInput = new Fl_Input(1205, 561, 180, 24, "File material");
           FileMaterialInput->callback((Fl_Callback*)cb_FileMaterialInput);
           FileMaterialInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileMaterialInput
-        { ObjectNameInput = new Fl_Input(1205, 396, 180, 24, "Object name");
+        { ObjectNameInput = new Fl_Input(1205, 426, 180, 24, "Object name");
           ObjectNameInput->callback((Fl_Callback*)cb_ObjectNameInput);
           ObjectNameInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* ObjectNameInput
         { Fl_Button* o = new Fl_Button(975, 85, 135, 25, "New RFO Object");
           o->callback((Fl_Callback*)cb_New);
         } // Fl_Button* o
-        { Fl_Button* o = new Fl_Button(1250, 85, 135, 25, "Save RFO");
+        { Fl_Button* o = new Fl_Button(1115, 115, 135, 25, "Save RFO");
           o->callback((Fl_Callback*)cb_Save2);
         } // Fl_Button* o
         { Fl_Button* o = new Fl_Button(1115, 85, 135, 25, "Delete");
           o->callback((Fl_Callback*)cb_Delete);
         } // Fl_Button* o
-        { Fl_Button* o = new Fl_Button(1250, 115, 135, 25, "Duplicate");
+        { Fl_Button* o = new Fl_Button(975, 115, 135, 25, "Duplicate");
           o->callback((Fl_Callback*)cb_Duplicate);
+        } // Fl_Button* o
+        { Fl_Button* o = new Fl_Button(1250, 85, 135, 25, "Save settings as...");
+          o->callback((Fl_Callback*)cb_Save3);
+        } // Fl_Button* o
+        { Fl_Button* o = new Fl_Button(1250, 115, 135, 25, "Load settings...");
+          o->callback((Fl_Callback*)cb_Load2);
         } // Fl_Button* o
         o->end();
       } // Fl_Group* o
@@ -1753,6 +1785,7 @@ GUI::GUI() {
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(835, 45, 540, 755, "Infill");
+        o->hide();
         { Fl_Group* o = new Fl_Group(840, 70, 535, 170, "Infill");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
@@ -2007,7 +2040,7 @@ e rest of the print.");
       { Fl_Group* o = new Fl_Group(835, 45, 555, 792, "GCode");
         o->hide();
         { Fl_Button* o = new Fl_Button(835, 95, 145, 25, "Load Gcode");
-          o->callback((Fl_Callback*)cb_Load2);
+          o->callback((Fl_Callback*)cb_Load3);
         } // Fl_Button* o
         { GCodeLengthText = new Fl_Output(985, 96, 225, 24);
         } // Fl_Output* GCodeLengthText
@@ -2043,7 +2076,7 @@ e rest of the print.");
           o->end();
         } // Fl_Tabs* o
         { Fl_Button* o = new Fl_Button(1215, 95, 145, 25, "Save Gcode");
-          o->callback((Fl_Callback*)cb_Save3);
+          o->callback((Fl_Callback*)cb_Save4);
         } // Fl_Button* o
         o->end();
       } // Fl_Group* o
