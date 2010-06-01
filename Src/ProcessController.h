@@ -110,7 +110,10 @@ public:
 		Center.z = 0.0f;
 
 		gui = 0;
-
+		LoadSTLPath = ".";
+		LoadRFOPath = ".";
+		LoadSettingsPath = ".";
+		LoadGcodePath = ".";
 };
 
 //	ProcessController::~ProcessController();
@@ -288,4 +291,9 @@ public:
 
 	// Maybe a pointer to the gui
 	GUI *gui;
+
+	string LoadSTLPath;
+	string LoadRFOPath;
+	string LoadSettingsPath;
+	string LoadGcodePath;
 };

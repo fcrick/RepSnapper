@@ -29,12 +29,12 @@ class GUI {open
         xywh {835 25 560 825} align 5
       } {
         Fl_Group {} {
-          label {Input file} open
+          label {Input file} open selected
           xywh {835 45 550 785}
         } {
           Fl_Button {} {
             label {Load STL}
-            callback {Fl_File_Chooser chooser("C:/code/printed-parts", "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadSTLPath.c_str(), "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -45,6 +45,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSTLPath = dir;
 MVC->ReadStl(dir);
 MVC->redraw();
 };}
@@ -57,7 +58,7 @@ MVC->redraw();
           }
           Fl_Button {} {
             label {Save STL}
-            callback {Fl_File_Chooser chooser("C:/code/printed-parts", "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadSTLPath.c_str(), "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -68,6 +69,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSTLPath = dir;
 MVC->ReadStl(dir);
 MVC->redraw();
 };}
@@ -129,7 +131,7 @@ MVC->redraw();}
           }
           Fl_Button {} {
             label {Load RFO}
-            callback {Fl_File_Chooser chooser("C:/code/printed-parts", "*.xml", Fl_File_Chooser::SINGLE, "Choose RFO file");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadRFOPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE, "Choose RFO file");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -140,6 +142,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadRFOPath = dir;
 MVC->ReadRFO(dir);
 MVC->redraw();
 };}
@@ -258,7 +261,7 @@ MVC->redraw();
           }
           Fl_Button {} {
             label {Save settings as...}
-            callback {Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadSettingsPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -269,13 +272,14 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSettingsPath = dir;
 MVC->ProcessControl.SaveSettingsAs(dir);
 };}
             xywh {1250 85 135 25}
           }
           Fl_Button {} {
             label {Load settings...}
-            callback {Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadSettingsPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -286,9 +290,10 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSettingsPath = dir;
 MVC->ProcessControl.LoadXML(dir);
 MVC->CopySettingsToGUI();
-};} selected
+};}
             xywh {1250 115 135 25}
           }
         }
@@ -608,7 +613,7 @@ MVC->redraw();}
         } {
           Fl_Button {} {
             label {Load Gcode}
-            callback {Fl_File_Chooser chooser("\\\\", "*.gcode", Fl_File_Chooser::SINGLE, "Choose GCode");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadGcodePath.c_str(), "*.gcode", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -619,6 +624,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadGcodePath = dir;
 MVC->ReadGCode(dir);
 MVC->redraw();
 };}
@@ -663,7 +669,7 @@ MVC->redraw();
           }
           Fl_Button {} {
             label {Save Gcode}
-            callback {Fl_File_Chooser chooser("\\\\", "*.gcode", Fl_File_Chooser::CREATE, "Choose filename");
+            callback {Fl_File_Chooser chooser(MVC->ProcessControl.LoadGcodePath.c_str(), "*.gcode", Fl_File_Chooser::CREATE, "Choose filename");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -674,6 +680,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadGcodePath = dir;
 Fl_Text_Buffer *buffer = GCodeResult->buffer();
 
 int result = buffer->savefile(chooser.value());

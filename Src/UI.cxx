@@ -3,7 +3,7 @@
 #include "UI.h"
 
 void GUI::cb_Load_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser("C:/code/printed-parts", "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadSTLPath.c_str(), "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -14,6 +14,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSTLPath = dir;
 MVC->ReadStl(dir);
 MVC->redraw();
 };
@@ -30,7 +31,7 @@ void GUI::cb_FixSTLerrorsButton(Fl_Light_Button* o, void* v) {
 }
 
 void GUI::cb_Save_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser("C:/code/printed-parts", "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadSTLPath.c_str(), "*.stl", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -41,6 +42,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSTLPath = dir;
 MVC->ReadStl(dir);
 MVC->redraw();
 };
@@ -100,7 +102,7 @@ void GUI::cb_RunLuaButton(Fl_Button* o, void* v) {
 }
 
 void GUI::cb_Load1_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser("C:/code/printed-parts", "*.xml", Fl_File_Chooser::SINGLE, "Choose RFO file");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadRFOPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE, "Choose RFO file");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -111,6 +113,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadRFOPath = dir;
 MVC->ReadRFO(dir);
 MVC->redraw();
 };
@@ -246,7 +249,7 @@ void GUI::cb_Duplicate(Fl_Button* o, void* v) {
 }
 
 void GUI::cb_Save3_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadSettingsPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE|Fl_File_Chooser::CREATE, "Save settings as...");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -257,6 +260,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSettingsPath = dir;
 MVC->ProcessControl.SaveSettingsAs(dir);
 };
 }
@@ -265,7 +269,7 @@ void GUI::cb_Save3(Fl_Button* o, void* v) {
 }
 
 void GUI::cb_Load2_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser(".", "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadSettingsPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE, "Save settings as...");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -276,6 +280,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadSettingsPath = dir;
 MVC->ProcessControl.LoadXML(dir);
 MVC->CopySettingsToGUI();
 };
@@ -577,7 +582,7 @@ void GUI::cb_Preview(Fl_Light_Button* o, void* v) {
 }
 
 void GUI::cb_Load3_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser("\\", "*.gcode", Fl_File_Chooser::SINGLE, "Choose GCode");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadGcodePath.c_str(), "*.gcode", Fl_File_Chooser::SINGLE, "Choose GCode");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -588,6 +593,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadGcodePath = dir;
 MVC->ReadGCode(dir);
 MVC->redraw();
 };
@@ -604,7 +610,7 @@ void GUI::cb_Convert(Fl_Button* o, void* v) {
 }
 
 void GUI::cb_Save4_i(Fl_Button*, void*) {
-  Fl_File_Chooser chooser("\\", "*.gcode", Fl_File_Chooser::CREATE, "Choose filename");
+  Fl_File_Chooser chooser(MVC->ProcessControl.LoadGcodePath.c_str(), "*.gcode", Fl_File_Chooser::CREATE, "Choose filename");
 chooser.show();
 while (chooser.shown())
 	Fl::wait();
@@ -615,6 +621,7 @@ std::string dir(chooser.value());
 
 if(dir.length())
 {
+MVC->ProcessControl.LoadGcodePath = dir;
 Fl_Text_Buffer *buffer = GCodeResult->buffer();
 
 int result = buffer->savefile(chooser.value());

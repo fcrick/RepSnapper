@@ -507,6 +507,11 @@ void ProcessController::SaveXML(XMLElement *e)
 	x->FindVariableZ("ShrinkFast", true, "1")->SetValueInt(m_ShrinkQuality == SHRINK_FAST);
 	x->FindVariableZ("ShrinkNice", true, "1")->SetValueInt(m_ShrinkQuality == SHRINK_NICE);
 	x->FindVariableZ("ApronInfillDistance", true, "1")->SetValueFloat(ApronInfillDistance);
+
+	x->FindVariableZ("LoadSTLPath", true,"[Empty]")->SetValue(LoadSTLPath.c_str());	
+	x->FindVariableZ("LoadRFOPath", true,"[Empty]")->SetValue(LoadRFOPath.c_str());	
+	x->FindVariableZ("LoadSettingsPath", true,"[Empty]")->SetValue(LoadSettingsPath.c_str());	
+	x->FindVariableZ("LoadGcodePath", true,"[Empty]")->SetValue(LoadGcodePath.c_str());	
 	/*
 
 	XMLElement *x = e->FindElementZ("RED_ProcessingSettings", true);
@@ -769,7 +774,21 @@ void ProcessController::LoadXML(XMLElement *e)
 	y=x->FindVariableZ("ShrinkNice", true, "0");
 	if(y)	m_ShrinkQuality = (bool)y->GetValueInt() ? SHRINK_NICE : SHRINK_FAST;
 
+	memset(buffer,0,10000);
+	x->FindVariableZ("LoadSTLPath", true, "")->GetValue(buffer);
+	LoadSTLPath = string(buffer);
 
+	memset(buffer,0,10000);
+	x->FindVariableZ("LoadRFOPath", true, "")->GetValue(buffer);
+	LoadRFOPath = string(buffer);
+
+	memset(buffer,0,10000);
+	x->FindVariableZ("LoadSettingsPath", true, "")->GetValue(buffer);
+	LoadSettingsPath = string(buffer);
+
+	memset(buffer,0,10000);
+	x->FindVariableZ("LoadGcodePath", true, "")->GetValue(buffer);
+	LoadGcodePath = string(buffer);
 	/*
 	ImageProcessingSettings();
 	UserCurve[0] = UserCurve[1] = 0.0f;
