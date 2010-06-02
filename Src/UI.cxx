@@ -1471,15 +1471,15 @@ GUI::GUI() {
         { Fl_Button* o = new Fl_Button(1250, 55, 135, 25, "Save settings");
           o->callback((Fl_Callback*)cb_Save1);
         } // Fl_Button* o
-        { Fl_Group* o = new Fl_Group(845, 605, 535, 160, "Lua script");
+        { Fl_Group* o = new Fl_Group(845, 610, 535, 155, "Lua script");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { Fl_Text_Editor* o = LuaScriptEditor = new Fl_Text_Editor(850, 610, 525, 150, "LUA script:");
+          { Fl_Text_Editor* o = LuaScriptEditor = new Fl_Text_Editor(850, 640, 525, 120, "LUA script:");
             LuaScriptEditor->align(FL_ALIGN_TOP_LEFT);
             Fl_Text_Buffer *luascript = new Fl_Text_Buffer();
             o->buffer(luascript);
           } // Fl_Text_Editor* LuaScriptEditor
-          { RunLuaButton = new Fl_Button(1250, 605, 125, 5, "Run");
+          { RunLuaButton = new Fl_Button(1250, 615, 125, 20, "Run");
             RunLuaButton->callback((Fl_Callback*)cb_RunLuaButton);
           } // Fl_Button* RunLuaButton
           o->end();
@@ -1500,22 +1500,22 @@ GUI::GUI() {
           RFP_Browser->when(FL_WHEN_CHANGED);
           Fl_Group::current()->resizable(RFP_Browser);
         } // Flu_Tree_Browser* RFP_Browser
-        { Fl_Group* o = new Fl_Group(1205, 185, 180, 64, "Translate");
+        { Fl_Group* o = new Fl_Group(1205, 161, 180, 35, "Translate");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { TranslateX = new Fl_Value_Input(1220, 226, 45, 23, "X");
+          { TranslateX = new Fl_Value_Input(1220, 167, 45, 23, "X");
             TranslateX->minimum(-300);
             TranslateX->maximum(300);
             TranslateX->step(0.1);
             TranslateX->callback((Fl_Callback*)cb_TranslateX);
           } // Fl_Value_Input* TranslateX
-          { TranslateY = new Fl_Value_Input(1280, 197, 45, 23, "Y");
+          { TranslateY = new Fl_Value_Input(1280, 167, 45, 23, "Y");
             TranslateY->minimum(-300);
             TranslateY->maximum(300);
             TranslateY->step(0.1);
             TranslateY->callback((Fl_Callback*)cb_TranslateY);
           } // Fl_Value_Input* TranslateY
-          { TranslateZ = new Fl_Value_Input(1335, 197, 45, 23, "Z");
+          { TranslateZ = new Fl_Value_Input(1335, 167, 45, 23, "Z");
             TranslateZ->minimum(-300);
             TranslateZ->maximum(300);
             TranslateZ->step(0.01);
@@ -1523,22 +1523,22 @@ GUI::GUI() {
           } // Fl_Value_Input* TranslateZ
           o->end();
         } // Fl_Group* o
-        { Fl_Group* o = new Fl_Group(1205, 250, 180, 64, "Rotate");
+        { Fl_Group* o = new Fl_Group(1205, 216, 180, 33, "Rotate");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { RotateX = new Fl_Value_Input(1220, 291, 45, 23, "X");
+          { RotateX = new Fl_Value_Input(1220, 222, 45, 23, "X");
             RotateX->minimum(-360);
             RotateX->maximum(360);
             RotateX->step(1);
             RotateX->callback((Fl_Callback*)cb_RotateX);
           } // Fl_Value_Input* RotateX
-          { RotateY = new Fl_Value_Input(1280, 262, 45, 23, "Y");
+          { RotateY = new Fl_Value_Input(1280, 222, 45, 23, "Y");
             RotateY->minimum(-360);
             RotateY->maximum(360);
             RotateY->step(1);
             RotateY->callback((Fl_Callback*)cb_RotateY);
           } // Fl_Value_Input* RotateY
-          { RotateZ = new Fl_Value_Input(1335, 262, 45, 23, "Z");
+          { RotateZ = new Fl_Value_Input(1335, 222, 45, 23, "Z");
             RotateZ->minimum(-360);
             RotateZ->maximum(360);
             RotateZ->step(1);
@@ -1546,49 +1546,49 @@ GUI::GUI() {
           } // Fl_Value_Input* RotateZ
           o->end();
         } // Fl_Group* o
-        { Fl_Group* o = new Fl_Group(1205, 310, 180, 90, "Scale");
+        { Fl_Group* o = new Fl_Group(1205, 265, 180, 65, "Scale");
           o->box(FL_ENGRAVED_FRAME);
           o->color((Fl_Color)FL_DARK3);
-          { ScaleX = new Fl_Value_Input(1220, 351, 45, 23, "X");
+          { ScaleX = new Fl_Value_Input(1220, 272, 45, 23, "X");
             ScaleX->minimum(-100);
             ScaleX->maximum(100);
             ScaleX->step(0.01);
             ScaleX->value(1);
             ScaleX->callback((Fl_Callback*)cb_ScaleX);
           } // Fl_Value_Input* ScaleX
-          { ScaleY = new Fl_Value_Input(1280, 322, 45, 23, "Y");
+          { ScaleY = new Fl_Value_Input(1280, 272, 45, 23, "Y");
             ScaleY->minimum(-100);
             ScaleY->maximum(100);
             ScaleY->step(0.01);
             ScaleY->value(1);
             ScaleY->callback((Fl_Callback*)cb_ScaleY);
           } // Fl_Value_Input* ScaleY
-          { ScaleZ = new Fl_Value_Input(1335, 322, 45, 23, "Z");
+          { ScaleZ = new Fl_Value_Input(1335, 272, 45, 23, "Z");
             ScaleZ->minimum(-100);
             ScaleZ->maximum(100);
             ScaleZ->step(0.01);
             ScaleZ->value(1);
             ScaleZ->callback((Fl_Callback*)cb_ScaleZ);
           } // Fl_Value_Input* ScaleZ
-          { ScaleAllAxies = new Fl_Light_Button(1220, 380, 160, 20, "All axis");
+          { ScaleAllAxies = new Fl_Light_Button(1220, 300, 160, 20, "All axis");
             ScaleAllAxies->value(1);
             ScaleAllAxies->selection_color((Fl_Color)2);
           } // Fl_Light_Button* ScaleAllAxies
           o->end();
         } // Fl_Group* o
-        { FileLocationInput = new Fl_Input(1205, 471, 180, 24, "File location");
+        { FileLocationInput = new Fl_Input(1205, 396, 180, 24, "File location");
           FileLocationInput->callback((Fl_Callback*)cb_FileLocationInput);
           FileLocationInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileLocationInput
-        { FileTypeInput = new Fl_Input(1205, 516, 180, 24, "Filetype");
+        { FileTypeInput = new Fl_Input(1205, 441, 180, 24, "Filetype");
           FileTypeInput->callback((Fl_Callback*)cb_FileTypeInput);
           FileTypeInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileTypeInput
-        { FileMaterialInput = new Fl_Input(1205, 561, 180, 24, "File material");
+        { FileMaterialInput = new Fl_Input(1205, 486, 180, 24, "File material");
           FileMaterialInput->callback((Fl_Callback*)cb_FileMaterialInput);
           FileMaterialInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* FileMaterialInput
-        { ObjectNameInput = new Fl_Input(1205, 426, 180, 24, "Object name");
+        { ObjectNameInput = new Fl_Input(1205, 351, 180, 24, "Object name");
           ObjectNameInput->callback((Fl_Callback*)cb_ObjectNameInput);
           ObjectNameInput->align(FL_ALIGN_TOP_LEFT);
         } // Fl_Input* ObjectNameInput

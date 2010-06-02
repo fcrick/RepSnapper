@@ -14,7 +14,7 @@ class GUI {open
   } {
     Fl_Window mainWindow {
       label {RepSnapper by Kulitorum www.kulitorum.com} open
-      xywh {8 0 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 resizable visible
+      xywh {16 73 1400 858} type Double box UP_BOX color 39 selection_color 39 labelsize 12 resizable visible
     } {
       Fl_Box MVC {
         label {An instace of ModelViewController}
@@ -115,18 +115,18 @@ MVC->redraw();}
           }
           Fl_Group {} {
             label {Lua script}
-            xywh {845 605 535 160} box ENGRAVED_FRAME color 39
+            xywh {845 610 535 155} box ENGRAVED_FRAME color 39
           } {
             Fl_Text_Editor LuaScriptEditor {
               label {LUA script:}
-              xywh {850 610 525 150} align 5
+              xywh {850 640 525 120} align 5
               code0 {Fl_Text_Buffer *luascript = new Fl_Text_Buffer();}
               code1 {o->buffer(luascript);}
             }
             Fl_Button RunLuaButton {
               label Run
               callback {MVC->RunLua(LuaScriptEditor->buffer()->text());}
-              xywh {1250 605 125 5}
+              xywh {1250 615 125 20}
             }
           }
           Fl_Button {} {
@@ -157,87 +157,87 @@ MVC->redraw();
           }
           Fl_Group {} {
             label Translate
-            xywh {1205 185 180 64} box ENGRAVED_FRAME color 39
+            xywh {1205 161 180 35} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input TranslateX {
               label X
               callback {MVC->Translate("X", o->value());}
-              xywh {1220 226 45 23} minimum -300 maximum 300 step 0.1
+              xywh {1220 167 45 23} minimum -300 maximum 300 step 0.1
             }
             Fl_Value_Input TranslateY {
               label Y
               callback {MVC->Translate("Y", o->value());}
-              xywh {1280 197 45 23} minimum -300 maximum 300 step 0.1
+              xywh {1280 167 45 23} minimum -300 maximum 300 step 0.1
             }
             Fl_Value_Input TranslateZ {
               label Z
               callback {MVC->Translate("Z", o->value());}
-              xywh {1335 197 45 23} minimum -300 maximum 300 step 0.01
+              xywh {1335 167 45 23} minimum -300 maximum 300 step 0.01
             }
           }
           Fl_Group {} {
             label Rotate
-            xywh {1205 250 180 64} box ENGRAVED_FRAME color 39
+            xywh {1205 216 180 33} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input RotateX {
               label X
               callback {MVC->RotateObject(1,0,0, o->value());}
-              xywh {1220 291 45 23} minimum -360 maximum 360 step 1
+              xywh {1220 222 45 23} minimum -360 maximum 360 step 1
             }
             Fl_Value_Input RotateY {
               label Y
               callback {MVC->RotateObject(0,1,0, o->value());}
-              xywh {1280 262 45 23} minimum -360 maximum 360 step 1
+              xywh {1280 222 45 23} minimum -360 maximum 360 step 1
             }
             Fl_Value_Input RotateZ {
               label Z
               callback {MVC->RotateObject(0,0,1, o->value());}
-              xywh {1335 262 45 23} minimum -360 maximum 360 step 1
+              xywh {1335 222 45 23} minimum -360 maximum 360 step 1
             }
           }
           Fl_Group {} {
             label Scale
-            xywh {1205 310 180 90} box ENGRAVED_FRAME color 39
+            xywh {1205 265 180 65} box ENGRAVED_FRAME color 39
           } {
             Fl_Value_Input ScaleX {
               label X
               callback {MVC->Scale("X", o->value());}
-              xywh {1220 351 45 23} minimum -100 maximum 100 step 0.01 value 1
+              xywh {1220 272 45 23} minimum -100 maximum 100 step 0.01 value 1
             }
             Fl_Value_Input ScaleY {
               label Y
               callback {MVC->Scale("Y", o->value());}
-              xywh {1280 322 45 23} minimum -100 maximum 100 step 0.01 value 1
+              xywh {1280 272 45 23} minimum -100 maximum 100 step 0.01 value 1
             }
             Fl_Value_Input ScaleZ {
               label Z
               callback {MVC->Scale("Z", o->value());}
-              xywh {1335 322 45 23} minimum -100 maximum 100 step 0.01 value 1
+              xywh {1335 272 45 23} minimum -100 maximum 100 step 0.01 value 1
             }
             Fl_Light_Button ScaleAllAxies {
               label {All axis}
-              xywh {1220 380 160 20} value 1 selection_color 2
+              xywh {1220 300 160 20} value 1 selection_color 2
             }
           }
           Fl_Input FileLocationInput {
             label {File location}
             callback {MVC->setFileLocation(o->value());}
-            xywh {1205 471 180 24} align 5
+            xywh {1205 396 180 24} align 5
           }
           Fl_Input FileTypeInput {
             label Filetype
             callback {MVC->setFileType(o->value());}
-            xywh {1205 516 180 24} align 5
+            xywh {1205 441 180 24} align 5
           }
           Fl_Input FileMaterialInput {
             label {File material}
             callback {MVC->setFileMaterial(o->value());}
-            xywh {1205 561 180 24} align 5
+            xywh {1205 486 180 24} align 5
           }
           Fl_Input ObjectNameInput {
             label {Object name}
             callback {MVC->setObjectname(o->value());}
-            xywh {1205 426 180 24} align 5
+            xywh {1205 351 180 24} align 5
           }
           Fl_Button {} {
             label {New RFO Object}
