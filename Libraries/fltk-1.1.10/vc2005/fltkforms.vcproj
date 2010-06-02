@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="fltkforms"
 	ProjectGUID="{C17BAB42-F00B-4F71-9DF6-A921511C89EE}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

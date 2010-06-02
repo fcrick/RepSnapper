@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="fltk"
 	ProjectGUID="{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}"
 	RootNamespace="fltk"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

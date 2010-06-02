@@ -1,58 +1,0 @@
-10
-
-dir
-191
-http://svn.kulitorum.com/RepSnapper/Libraries
-http://svn.kulitorum.com/RepSnapper
-
-
-
-2010-03-25T14:34:08.435088Z
-174
-michael
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-686d4eb6-aa70-4f30-b8fa-ee57029aed71
-
-Serial
-dir
-
-xml
-dir
-
-luabind-0.9
-dir
-
-gle-3.1.0
-dir
-
-glut-3.7.6
-dir
-
-lua-5.1.4
-dir
-
-vmmlib
-dir
-
-Boost1.40
-dir
-
-ann_1.1.1
-dir
-
-fltk-1.1.10
-dir
-

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="jpeg"
 	ProjectGUID="{08B82852-90B3-4767-A5D2-F0A4FCCB2377}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
