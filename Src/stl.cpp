@@ -779,7 +779,7 @@ void CuttingPlane::MakeGcode(const std::vector<Vector2f> &infill, GCode &code, f
 }
 
 
-void STL::CalcCuttingPlane(float where, CuttingPlane &plane, const Matrix4f &T)
+void STL::CalcCuttingPlane(float plane_z, CuttingPlane &plane, const Matrix4f &transform)
 {
 	// intersect lines with plane
 	
@@ -787,8 +787,8 @@ void STL::CalcCuttingPlane(float where, CuttingPlane &plane, const Matrix4f &T)
 	plane.vertices.clear();
 	plane.polygons.clear();
 	
-	Vector3f min = T*Min;
-	Vector3f max = T*Max;
+	Vector3f min = transform*Min;
+	Vector3f max = transform*Max;
 
 	plane.Min.x = min.x;
 	plane.Min.y = min.y;
@@ -801,21 +801,27 @@ void STL::CalcCuttingPlane(float where, CuttingPlane &plane, const Matrix4f &T)
 	{
 		foundOne=false;
 		Segment line(-1,-1);
-		Vector3f P1 = T*triangles[i].A;
-		Vector3f P2 = T*triangles[i].B;
-		if(where <= P1.z != where <= P2.z)
+
+		Vector3f P1 = transform*triangles[i].A;
+		Vector3f P2 = transform*triangles[i].B;
+
+		// if the two points are on opposing sides of the plane
+		if(plane_z <= P1.z != plane_z <= P2.z)
 		{
-			float t = (where-P1.z)/(float)(P2.z-P1.z);
+			float t = (plane_z-P1.z)/(float)(P2.z-P1.z);
 			Vector3f p = P1+((Vector3f)(P2-P1)*t);
 			line.start = pointNr++;
 			plane.vertices.push_back(Vector2f(p.x,p.y));;
 			foundOne = true;
 		}
-		P1 = T*triangles[i].B;
-		P2 = T*triangles[i].C;
-		if(where <= P1.z != where <= P2.z)
+
+		P1 = transform*triangles[i].B;
+		P2 = transform*triangles[i].C;
+
+		// if the two points are on opposing sides of the plane
+		if(plane_z <= P1.z != plane_z <= P2.z)
 		{
-			float t = (where-P1.z)/(float)(P2.z-P1.z);
+			float t = (plane_z-P1.z)/(float)(P2.z-P1.z);
 			Vector3f p = P1+((Vector3f)(P2-P1)*t);
 			if(foundOne)
 				line.end = pointNr++;
@@ -829,62 +835,61 @@ void STL::CalcCuttingPlane(float where, CuttingPlane &plane, const Matrix4f &T)
 			}
 			foundOne=true;
 		}
-		P1 = T*triangles[i].C;
-		P2 = T*triangles[i].A;
-		if(where <= P1.z != where <= P2.z)
+
+		P1 = transform*triangles[i].C;
+		P2 = transform*triangles[i].A;
+
+		// if the two points are on opposing sides of the plane
+		if(plane_z <= P1.z != plane_z <= P2.z)
 		{
-			float t = (where-P1.z)/(P2.z-P1.z);
+			float t = (plane_z-P1.z)/(P2.z-P1.z);
 			Vector3f p = P1+((Vector3f)(P2-P1)*t);
 			line.end = pointNr++;
 			plane.vertices.push_back(Vector2f(p.x,p.y));;
 			plane.lines.push_back(line);
 		}
-	// Check segment normal against triangle normal. Flip segment, as needed.
-	if(line.start != -1 && line.end != -1)	// if we found a intersecting triangle
+	
+		// Check segment normal against triangle normal. Flip segment, as needed.
+		if (line.start != -1 && line.end != -1)	// if we found a intersecting triangle
 		{
-		Vector3f Norm = triangles[i].Normal;
-		Vector2f triangleNormal = Vector2f(Norm.x, Norm.y);
-		Vector2f p = plane.vertices[line.start];
-		Vector2f segmentNormal = (plane.vertices[line.end] - p).normal();
-		triangleNormal.normalise();
-		segmentNormal.normalise();
-/*
-	if(1)
-	{
-		glColor3f(1,0,0);
-		glBegin(GL_LINES);
-		Vector2f Center = (p + plane.vertices[line.end]) /2;
-		glVertex3f( Center.x, Center.y, where);
-		glVertex3f( Center.x+triangleNormal.x*2,  Center.y+triangleNormal.y*2,  where);
-		glColor3f(0,0,1);
-		glVertex3f( Center.x, Center.y, where);
-		glVertex3f( Center.x+segmentNormal.x,  Center.y+segmentNormal.y,  where);
-		glEnd();
-	}	*/
-		if( (triangleNormal-segmentNormal).lengthSquared() > 0.2f)	// if normals does not align, flip the segment
+			Vector3f Norm = triangles[i].Normal;
+			Vector2f triangleNormal = Vector2f(Norm.x, Norm.y);
+			Vector2f p = plane.vertices[line.start];
+			Vector2f segmentNormal = (plane.vertices[line.end] - p).normal();
+			triangleNormal.normalise();
+			segmentNormal.normalise();
+
+			//glColor3f(1,0,0);
+			//glBegin(GL_LINES);
+			//Vector2f Center = (p + plane.vertices[line.end]) /2;
+			//glVertex3f( Center.x, Center.y, where);
+			//glVertex3f( Center.x+triangleNormal.x*2,  Center.y+triangleNormal.y*2,  where);
+			//glColor3f(0,0,1);
+			//glVertex3f( Center.x, Center.y, where);
+			//glVertex3f( Center.x+segmentNormal.x,  Center.y+segmentNormal.y,  where);
+			//glEnd();
+		
+			// these two normals should be either almost identical, or in opposite directions
+			if ((triangleNormal-segmentNormal).lengthSquared() > 0.2f)	// if normals does not align, flip the segment
 			{
-			int tmp = line.start;
-			line.start = line.end;
-			line.end = tmp;
-			plane.lines.back() = line;
+				int tmp = line.start;
+				line.start = line.end;
+				line.end = tmp;
+				plane.lines.back() = line;
+			
+				//Vector2f triangleNormal = Vector2f(triangles[i].Normal.x, triangles[i].Normal.y);
+				//Vector2f p = plane.vertices[line.start];
+				//Vector2f segmentNormal = (plane.vertices[line.end] - p);
+				//segmentNormal = Vector2f(-segmentNormal.y, segmentNormal.x);
+				//triangleNormal.normalise();
+				//segmentNormal.normalise();
 
-/*	if(1)
-	{
-		Vector2f triangleNormal = Vector2f(triangles[i].Normal.x, triangles[i].Normal.y);
-		Vector2f p = plane.vertices[line.start];
-		Vector2f segmentNormal = (plane.vertices[line.end] - p);
-		segmentNormal = Vector2f(-segmentNormal.y, segmentNormal.x);
-		triangleNormal.normalise();
-		segmentNormal.normalise();
-
-		Vector2f Center = (p + plane.vertices[line.end]) /2;
-		glBegin(GL_LINES);
-		glColor3f(0,1,0);
-		glVertex3f( Center.x, Center.y, where);
-		glVertex3f( Center.x+segmentNormal.x,  Center.y+segmentNormal.y,  where);
-		glEnd();
-	}	*/
-
+				//Vector2f Center = (p + plane.vertices[line.end]) /2;
+				//glBegin(GL_LINES);
+				//glColor3f(0,1,0);
+				//glVertex3f( Center.x, Center.y, where);
+				//glVertex3f( Center.x+segmentNormal.x,  Center.y+segmentNormal.y,  where);
+				//glEnd();
 			}
 		}
 	}
