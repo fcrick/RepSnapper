@@ -65,10 +65,7 @@ private:
   static void cb_Save1(Fl_Button*, void*);
 public:
   Fl_Text_Editor *LuaScriptEditor;
-  Fl_Button *RunLuaButton;
 private:
-  void cb_RunLuaButton_i(Fl_Button*, void*);
-  static void cb_RunLuaButton(Fl_Button*, void*);
   void cb_Load1_i(Fl_Button*, void*);
   static void cb_Load1(Fl_Button*, void*);
 public:

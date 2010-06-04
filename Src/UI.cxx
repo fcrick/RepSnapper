@@ -94,13 +94,6 @@ void GUI::cb_Save1(Fl_Button* o, void* v) {
   ((GUI*)(o->parent()->parent()->parent()->user_data()))->cb_Save1_i(o,v);
 }
 
-void GUI::cb_RunLuaButton_i(Fl_Button*, void*) {
-  MVC->RunLua(LuaScriptEditor->buffer()->text());
-}
-void GUI::cb_RunLuaButton(Fl_Button* o, void* v) {
-  ((GUI*)(o->parent()->parent()->parent()->parent()->user_data()))->cb_RunLuaButton_i(o,v);
-}
-
 void GUI::cb_Load1_i(Fl_Button*, void*) {
   Fl_File_Chooser chooser(MVC->ProcessControl.LoadRFOPath.c_str(), "*.xml", Fl_File_Chooser::SINGLE, "Choose RFO file");
 chooser.show();
@@ -1479,9 +1472,6 @@ GUI::GUI() {
             Fl_Text_Buffer *luascript = new Fl_Text_Buffer();
             o->buffer(luascript);
           } // Fl_Text_Editor* LuaScriptEditor
-          { RunLuaButton = new Fl_Button(1250, 615, 125, 20, "Run");
-            RunLuaButton->callback((Fl_Callback*)cb_RunLuaButton);
-          } // Fl_Button* RunLuaButton
           o->end();
         } // Fl_Group* o
         { Fl_Button* o = new Fl_Button(845, 85, 130, 25, "Load RFO");

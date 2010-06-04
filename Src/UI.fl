@@ -123,11 +123,6 @@ MVC->redraw();}
               code0 {Fl_Text_Buffer *luascript = new Fl_Text_Buffer();}
               code1 {o->buffer(luascript);}
             }
-            Fl_Button RunLuaButton {
-              label Run
-              callback {MVC->RunLua(LuaScriptEditor->buffer()->text());}
-              xywh {1250 615 125 20}
-            }
           }
           Fl_Button {} {
             label {Load RFO}

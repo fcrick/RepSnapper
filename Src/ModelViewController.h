@@ -75,9 +75,6 @@ public:
 	// Callback functions
 	void resize (int x,int y, int width, int height);		// Reshape The Window When It's Moved Or Resized
 
-	// LUA
-	void RunLua(char* buffer);
-
 	void SetDisplayGCode(bool val){ProcessControl.DisplayGCode = val;}
 	void SetLuminanceShowsSpeed(bool val){ProcessControl.LuminanceShowsSpeed = val;}
 	void CalcBoundingBoxAndZoom(){ProcessControl.CalcBoundingBoxAndZoom();}

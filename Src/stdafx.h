@@ -64,16 +64,6 @@ extern void YUVTORGB	(float y, float u, float v, float &r, float &g, float &b);
 #include "ModelViewController.h"
 
 #include "AsyncSerial.h"
-#ifdef WIN32
-extern "C"
-{
-#include <lua.h>
-}
-
-#include <luabind/luabind.hpp>
-
-using namespace luabind;
-#endif
 
 extern ModelViewController *MVC;
 

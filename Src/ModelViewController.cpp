@@ -865,39 +865,6 @@ ProcessController &ModelViewController::getProcessController()
 	return ProcessControl;
 }
 
-
-void ModelViewController::RunLua(char* script)
-{
-#ifdef WIN32
-	// Create a new lua state
-	lua_State *myLuaState = lua_open();
-
-	// Connect LuaBind to this lua state
-	luabind::open(myLuaState);
-
-	try {
-		luabind::module(myLuaState)
-			[
-				class_ <ModelViewController>("ModelViewController")
-				.def("ReadStl", &ModelViewController::ReadStl)
-			];
-			//		ProcessControl.BindLua(myLuaState);
-
-		luabind::globals(myLuaState)["base"] = this;
-
-		luaL_dostring(myLuaState, script);
-		// Read a global from the lua script
-//		size_t ResourceCount = luabind::object_cast<size_t>(luabind::globals(myLuaState)["ResourceCount"]);
-//		cout << ResourceCount << endl;
-	}// try
-	catch(const std::exception &TheError)
-	{
-		cerr << TheError.what() << endl;
-	}
-
-	lua_close(myLuaState);
-#endif
-}
 void ModelViewController::ReadRFO(string filename)
 {
 	ProcessControl.rfo.Open(filename, ProcessControl);
