@@ -114,6 +114,7 @@ void RepRapSerial::StartPrint()
 {
 	m_iLineNr = 0;
 	m_bPrinting = true;
+	startTime = 0;
 	SendNextLine();
 	SendNextLine();
 	SendNextLine();
@@ -142,7 +143,45 @@ void RepRapSerial::SendNextLine()
 		return;
 		}
 	if(gui)
+	{
+		// start the timer when we get here the first time since starting
+		if (startTime == 0)
+		{
+			startTime = GetTickCount();
+		}
+
 		gui->ProgressBar->value((float)m_iLineNr);
+		static char buffer[200];
+		float elapsed = (GetTickCount() - startTime) / 1000.f;
+		float max = gui->ProgressBar->maximum();
+		float progress = max > 0.0f ? m_iLineNr / gui->ProgressBar->maximum() : 0.0f;
+		float total_time = progress > 0.0f ? elapsed / progress : elapsed;
+		float remaining = total_time - elapsed;
+
+		int remaining_seconds = (int)fmod(remaining, 60.0f);
+		int remaining_minutes = ((int)fmod(remaining, 3600.0f) - remaining_seconds) / 60;
+		int remaining_hours = (int)remaining / 3600;
+
+		char *buffer_pos = buffer;
+		sprintf(buffer, "no estimate");
+		
+		if (remaining_hours > 0)
+		{
+			buffer_pos += sprintf(buffer_pos, "%dh", remaining_hours);
+		}
+
+		if (remaining_minutes > 0 || buffer_pos != buffer)
+		{
+			buffer_pos += sprintf(buffer_pos, "%02dm", remaining_minutes);
+		}
+		
+		if (remaining_seconds > 0 || buffer_pos != buffer)
+		{
+			buffer_pos += sprintf(buffer_pos, "%02ds", remaining_seconds);
+		}
+
+		gui->ProgressBar->label(buffer);
+	}
 
 }
 

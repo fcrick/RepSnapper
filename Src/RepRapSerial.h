@@ -87,7 +87,15 @@ PWM (D 14) PD6 20|        |21  PD7 (D 15) PWM
 class RepRapSerial : public BufferedAsyncSerial
 {
 public:
-	RepRapSerial(){m_bPrinting = false; m_iLineNr = 0; gui=0;m_bConnected=false; debugMask =  DEBUG_ECHO | DEBUG_INFO | DEBUG_ERRORS;logFile=0;}
+	RepRapSerial()
+	{
+		m_bPrinting = false; 
+		m_iLineNr = 0; 
+		gui=0;
+		m_bConnected=false; 
+		debugMask = DEBUG_ECHO | DEBUG_INFO | DEBUG_ERRORS;
+		logFile=0;
+	}
 	void open(const std::string& devname, unsigned int baud_rate)
 	{
 		try{
@@ -118,6 +126,7 @@ public:
 	void DisConnect();
 	bool isPrinting(){return m_bPrinting;}
 	bool m_bPrinting;
+	unsigned long startTime;
 
 private:
 	void debugPrint(string s, bool selectLine = false);
