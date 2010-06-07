@@ -144,15 +144,22 @@ void RepRapSerial::SendNextLine()
 		}
 	if(gui)
 	{
+#ifndef WIN32
+		struct timeval now_timeval;
+		gettimeofday(&now_timeval, NULL);
+		ulong now = now_timeval.tv_sec * 1000 + now_timeval.tv_usec / 1000;
+#else
+		ulong now = GetTickCount();
+#endif
 		// start the timer when we get here the first time since starting
 		if (startTime == 0)
 		{
-			startTime = GetTickCount();
+			startTime = now;
 		}
 
 		gui->ProgressBar->value((float)m_iLineNr);
 		static char buffer[200];
-		float elapsed = (GetTickCount() - startTime) / 1000.f;
+		float elapsed = (now - startTime) / 1000.f;
 		float max = gui->ProgressBar->maximum();
 		float progress = max > 0.0f ? m_iLineNr / gui->ProgressBar->maximum() : 0.0f;
 		float total_time = progress > 0.0f ? elapsed / progress : elapsed;
